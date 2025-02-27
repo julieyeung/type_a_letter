@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>1 INPUT 1 OUTPUT TEMPLATE</title>
+    <style>
+       body {
+         background-color:bisque;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+}
+
+.marquee-container {
+            width: 100%;
+            position: absolute;
+            top: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-text {
+            display: flex;
+            gap: 50px; /* Adjust spacing between duplicated text */
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            animation: scrollText 10s linear infinite;
+        }
+
+        @keyframes scrollText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* STYLE FOR THE INPUT FIELD CSS */
+        #charInput {
+            background-color:lightsalmon;
+            width: 300px; 
+            height: 50px;
+            position: absolute; 
+            top: 47%;
+            left: 40%;
+        }
+
+        /* STYLE FOR THE SUBMIT BUTTON CSS */
+        #submitButton:hover {
+            background-color:coral;
+            text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5); 
+        }
+
+       #submitButton {
+        background-color: cornsilk;
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+}
+
+
+        /* STYLE FOR THE IMAGE CSS*/
+        #displayedImage {
+        display: none;
+        margin-top: 20px;
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        }
+
+        /* Default styles (already in your code) */
+
+@media screen and (max-width: 768px) {
+    body {
+        height: auto;
+        padding: 20px;
+    }
+
+    .marquee-container {
+        font-size: 18px;
+        top: 5px; 
+    }
+
+    .marquee-text {
+        font-size: 18px; 
+        gap: 30px; 
+    }
+
+    #charInput {
+        width: 80%; 
+        max-width: 250px;
+        height: 40px;
+        font-size: 18px;
+        top: 40%; 
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #submitButton {
+        width: 80%;
+        max-width: 200px;
+        font-size: 16px;
+        top: 55%; 
+    }
+
+    #displayedImage {
+        width: 90%; 
+        max-width: 400px;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+
+    
+    <!-- INPUT FIELD FOR 1 CHARACTER -->
+    <input type="text" id="charInput" maxlength="1">
+
+    <!-- BUTTON TO DISPLAY IMAGE Can change text to anything, doesn't have to be the same, play with it-->
+    <button onclick="displayImage()" id="submitButton">Show Image</button>
+
+    <!-- IMAGE TO DISPLAY -->
+    <img id="displayedImage" src="" alt="Displayed Image">
+
+
+    <!-- Image Display Script Below -->
+    <script>
+        // Array of images
+        // DIRECTIONS: UPDATE THE URLS WITH THE RELATIVE LINKS OF YOUR IMAGES
+        const images = [
+            "IMG/Acne Studios F_W 2022 _ Bilingual _ Metal Magazine.jpeg?text=A", //A
+            "IMG/Balenciaga Is in Its.jpeg?text=B", //B
+            "IMG/COMME des GARCONS SHIRT.jpeg?text=C", //C
+            "IMG/Diesel (@diesel) • Fotos y vídeos de Instagram.jpeg?text=D", //D
+            "IMG/Emporio Armani Spring Summer 2024 Womenswear Collection.jpeg?text=E", //E
+            "IMG/Fendi’s Latest Collection Wholly Embraces Clout.jpeg?text=F", //F
+            "IMG/Givenchy Debuts Sneaker Collab With Onitsuka Tiger.jpeg?text=G", //G
+            "IMG/HERMES-SS22-Jack-Davison-02.jpg?text=H", //H
+            "IMG/isseymiyake.jpeg?text=I", //I
+            "IMG/Jean Paul Gaultier.jpeg?text=J", //J
+            "IMG/Kenzo University Campaign F_W 22 by Osma Harvilahti (Kenzo).jpeg?text=K", //K
+            "IMG/Loewe Fall_Winter 2015 Campaign - Fucking Young!.jpeg?text=L", //L
+            "IMG/Maison Margiela and MM6 Deliver Sleek Silhouettes for FW20.jpeg?text=M", //M
+            "IMG/NIKE CNY 2023 - BLOC PRODUCTIONS.jpeg?text=N", //N
+            "IMG/off_white.jpg?text=O", //O
+            "IMG/prada.jpeg?text=P", //P
+            "IMG/QUAY_TTYL_GOLD_BROWN_TED_0047.webp?text=Q", //Q
+            "IMG/rickowens.jpg?text=R", //R
+            "IMG/Saint Laurent Pre-Fall 2024 Fashion Show.jpeg?text=S", //S
+            "IMG/Thierry Mugler’s Photographs Are Just as Daring as His Couture - Galerie.jpeg?text=T", //T
+            "IMG/Backstage at Uma Wang Spring Summer 2024 Runway Show.jpeg?text=U", //U
+            "IMG/viviennewestwood.jpeg?text=V", //V
+            "IMG/WOOYOUNGMI Spring Summer 2023 Collection.jpeg?text=W", //W
+            "IMG/xushi.jpeg?text=X", //X
+            "IMG/Yohji Yamamoto (ヨウジヤマモト) Official Site.jpeg?text=Y", //Y
+            "IMG/10.23_ziggychen_look3222_1024x1024.jpg?text=Z"  //Z
+        ];
+
+        function displayImage() {
+            const input = document.getElementById("charInput").value.toUpperCase();
+            const imgElement = document.getElementById("displayedImage");
+            
+            // Assign an image based on character (A-Z)
+            const index = input.charCodeAt(0) - 65; // 'A' is 65 in ASCII
+            if (index >= 0 && index < images.length) {
+                imgElement.src = images[index];
+                imgElement.style.display = "block";
+            } else {
+                /* 
+                alert("Please enter a letter between A and Z.");
+                imgElement.style.display = "none";
+                */
+
+                // IF INVALID INPUT IS ENTERED, DISPLAY ALTERNATE IMAGE
+                imgElement.src = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmtkdnJhMXY4Njd1cXR3MTM3MW1nMzZ1NXNhNHlhOHA0MWF2dDUzdyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13dRJkj5wgKq9q/giphy.gif"
+                imgElement.style.display = "block";
+            }
+        }
+    </script>
+
+<div class="marquee-container">
+    <span class="marquee-text">TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER </span>
+    <span class="marquee-text">TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER </span>
+</div>
+
+</body>
+</html>
