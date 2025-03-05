@@ -2,195 +2,235 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width= , initial-scale=1.0">
     <title>1 INPUT 1 OUTPUT TEMPLATE</title>
     <style>
        body {
-         background-color:bisque;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        text-align: center;
-}
+        background-color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100vh;
+            overflow: hidden;
+       }
 
-.marquee-container {
+        .marquee-container {
             width: 100%;
             position: absolute;
-            top: 10px;
+            bottom: 10px; /* Changed position to bottom */
             overflow: hidden;
             white-space: nowrap;
         }
 
-        .marquee-text {
+
+        .marquee-top .marquee-text {
+        }   
+
+        .marquee-bottom .marquee-text {
             display: flex;
-            gap: 50px; /* Adjust spacing between duplicated text */
+            gap: 50px;
             font-size: 24px;
             font-weight: bold;
             color: white;
-            animation: scrollText 10s linear infinite;
-        }
+            animation: scrollText 6s linear infinite;
+            font-size: 200px;
+        }   
 
         @keyframes scrollText {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
         
-        /* STYLE FOR THE INPUT FIELD CSS */
+        /* STYLE FOR THE INPUT FIELD */
         #charInput {
-            background-color:lightsalmon;
-            width: 300px; 
+            background-color: floralwhite;
+            width: 300px;
             height: 50px;
-            position: absolute; 
+            position: absolute;
             top: 47%;
-            left: 40%;
+            left: 9.5%;
+            font-size: 20px;
+            text-align: center;
+            border: none;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            border-radius: 15px;
+            transition: all 0.3s ease-in-out;
+            opacity: 30%;
         }
 
-        /* STYLE FOR THE SUBMIT BUTTON CSS */
+        #submitButton {
+            background-color: transparent;
+            color: white;
+            position: absolute;
+            top: 60%;
+            left: 20%;
+            transform: translate(-50%, -50%);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 18px;
+            font-family: 'Times New Roman', Times, serif;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+            opacity: 60%;
+        }
+
         #submitButton:hover {
-            background-color:coral;
-            text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5); 
+            color:ivory;
+            text-shadow: 3px 3px 7px rgba(0, 0, 0, 0.5);
+            opacity: 100%;
         }
 
-       #submitButton {
-        background-color: cornsilk;
-        position: absolute;
-        top: 60%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-}
-
-
-        /* STYLE FOR THE IMAGE CSS*/
-        #displayedImage {
-        display: none;
-        margin-top: 20px;
-        width: 100%;
-        max-width: 500px;
-        height: auto;
+        #charInput:hover {
+            opacity: 100%;
         }
 
-        /* Default styles (already in your code) */
+        .image-container {
+            width: 100%;
+            max-width: 500px;
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
 
-@media screen and (max-width: 768px) {
-    body {
-        height: auto;
-        padding: 20px;
-    }
+        .image-track {
+            display: flex;
+            flex-direction: column;
+            transition: transform 2s ease-in-out; /* Slowed down the transition time */
+            gap: 20px; /* Space between images */
+        }
 
-    .marquee-container {
-        font-size: 18px;
-        top: 5px; 
-    }
+        .image-track img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
 
-    .marquee-text {
-        font-size: 18px; 
-        gap: 30px; 
-    }
+        /* Dropdown for number selection */
+        .box {
+            font-size: 25px;
+            color: aliceblue;
+            position: absolute;
+            left: 70%;
+            top: 45%;
+        }
 
-    #charInput {
-        width: 80%; 
-        max-width: 250px;
-        height: 40px;
-        font-size: 18px;
-        top: 40%; 
-        left: 50%;
-        transform: translateX(-50%);
-    }
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            #charInput {
+                width: 80%;
+                max-width: 250px;
+                height: 40px;
+                font-size: 18px;
+                top: 40%;
+                left: 50%;
+                transform: translateX(-50%);
+            }
 
-    #submitButton {
-        width: 80%;
-        max-width: 200px;
-        font-size: 16px;
-        top: 55%; 
-    }
+            #submitButton {
+                width: 80%;
+                max-width: 200px;
+                font-size: 16px;
+                top: 55%;
+            }
 
-    #displayedImage {
-        width: 90%; 
-        max-width: 400px;
-    }
-}
-
-
+            .box {
+                left: 50%;
+                top: 55%;
+                transform: translateX(-50%);
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
-
-    
-    <!-- INPUT FIELD FOR 1 CHARACTER -->
-    <input type="text" id="charInput" maxlength="1">
-
-    <!-- BUTTON TO DISPLAY IMAGE Can change text to anything, doesn't have to be the same, play with it-->
-    <button onclick="displayImage()" id="submitButton">Show Image</button>
-
-    <!-- IMAGE TO DISPLAY -->
-    <img id="displayedImage" src="" alt="Displayed Image">
-
-
-    <!-- Image Display Script Below -->
+    <input type="text" id="charInput" maxlength="1" placeholder="Type Here">
+    <button onclick="displayImages()" id="submitButton">Show Image</button>
+    <div class="box">
+        <label for="night">The year was</label>
+        <select id="night" name="night">
+            <option value="2021">2021.</option>
+            <option value="2016">2016.</option>
+            <option value="1962">1962.</option>
+            <option value="1998">1998.</option>
+            <option value="1994">1994.</option>
+        </select>
+    </div>
+    <div class="image-container">
+        <div class="image-track" id="imageTrack"></div>
+    </div>
     <script>
-        // Array of images
-        // DIRECTIONS: UPDATE THE URLS WITH THE RELATIVE LINKS OF YOUR IMAGES
-        const images = [
-            "IMG/Acne Studios F_W 2022 _ Bilingual _ Metal Magazine.jpeg?text=A", //A
-            "IMG/Balenciaga Is in Its.jpeg?text=B", //B
-            "IMG/COMME des GARCONS SHIRT.jpeg?text=C", //C
-            "IMG/Diesel (@diesel) • Fotos y vídeos de Instagram.jpeg?text=D", //D
-            "IMG/Emporio Armani Spring Summer 2024 Womenswear Collection.jpeg?text=E", //E
-            "IMG/Fendi’s Latest Collection Wholly Embraces Clout.jpeg?text=F", //F
-            "IMG/Givenchy Debuts Sneaker Collab With Onitsuka Tiger.jpeg?text=G", //G
-            "IMG/HERMES-SS22-Jack-Davison-02.jpg?text=H", //H
-            "IMG/isseymiyake.jpeg?text=I", //I
-            "IMG/Jean Paul Gaultier.jpeg?text=J", //J
-            "IMG/Kenzo University Campaign F_W 22 by Osma Harvilahti (Kenzo).jpeg?text=K", //K
-            "IMG/Loewe Fall_Winter 2015 Campaign - Fucking Young!.jpeg?text=L", //L
-            "IMG/Maison Margiela and MM6 Deliver Sleek Silhouettes for FW20.jpeg?text=M", //M
-            "IMG/NIKE CNY 2023 - BLOC PRODUCTIONS.jpeg?text=N", //N
-            "IMG/off_white.jpg?text=O", //O
-            "IMG/prada.jpeg?text=P", //P
-            "IMG/QUAY_TTYL_GOLD_BROWN_TED_0047.webp?text=Q", //Q
-            "IMG/rickowens.jpg?text=R", //R
-            "IMG/Saint Laurent Pre-Fall 2024 Fashion Show.jpeg?text=S", //S
-            "IMG/Thierry Mugler’s Photographs Are Just as Daring as His Couture - Galerie.jpeg?text=T", //T
-            "IMG/Backstage at Uma Wang Spring Summer 2024 Runway Show.jpeg?text=U", //U
-            "IMG/viviennewestwood.jpeg?text=V", //V
-            "IMG/WOOYOUNGMI Spring Summer 2023 Collection.jpeg?text=W", //W
-            "IMG/xushi.jpeg?text=X", //X
-            "IMG/Yohji Yamamoto (ヨウジヤマモト) Official Site.jpeg?text=Y", //Y
-            "IMG/10.23_ziggychen_look3222_1024x1024.jpg?text=Z"  //Z
-        ];
+        let currentIndex = 0;
+        let currentImages = [];
 
-        function displayImage() {
-            const input = document.getElementById("charInput").value.toUpperCase();
-            const imgElement = document.getElementById("displayedImage");
-            
-            // Assign an image based on character (A-Z)
-            const index = input.charCodeAt(0) - 65; // 'A' is 65 in ASCII
-            if (index >= 0 && index < images.length) {
-                imgElement.src = images[index];
-                imgElement.style.display = "block";
+        function displayImages() {
+            const charInput = document.getElementById("charInput").value.toUpperCase();
+            const numInput = document.getElementById("night").value;
+            const imageTrack = document.getElementById("imageTrack");
+            const marqueeText = document.querySelector(".marquee-text"); // New variable for marquee text
+
+            const imageMap = {
+                "A-2021": ["IMG/Alexander+McQueen+FW2021+by+Paolo+Roversi+(5).jpg", "IMG/409507.jpeg", "IMG/409506.jpeg"],
+                "R-2016": ["IMG/372232.jpg", "IMG/372231.jpg", "IMG/372228.jpg"],
+                "Y-1962": ["IMG/8afbca8c159a2b8815d447dc143775c2.jpg", "IMG/5681bc683472f4480e6d56ec7b07d0ac.jpg", "IMG/NUM_HC1962E097PH01.0165.jpg"],
+                "T-1998": ["IMG/808ab3c14c878d7fd93bb52bfd8df2b4.jpg", "IMG/a47379944d8cef885031be09bb45b452_newton_photography_helmut_newton_master.jpg", "IMG/126-fig-203-ii.jpg"],
+                "G-1994": ["IMG/FnWxz1VWIAEgkX7.jpeg", "IMG/376578.jpg", "IMG/JEAN-PAUL-GAULTIER-SPRING-1994-RTW-DETAIL-06.webp"],
+            };
+
+            const textMap = { // New object to store different scrolling text messages
+                "A-2021": "ALEXANDER MCQUEEN",
+                "R-2016": "RICK OWENS",
+                "Y-1962": "YVES SAINT LAURENT",
+                "T-1998": "THIERRY MUGLER",
+                "G-1994": "GAULTIER",
+                "DEFAULT": "SOMETHING ELSE....(T)R(Y) (A) LE(T)TE(R)"
+            };
+
+            const key = `${charInput}-${numInput}`;
+            imageTrack.innerHTML = "";
+
+            if (imageMap[key]) {
+                currentImages = imageMap[key];
+                currentIndex = 0;
+
+                currentImages.forEach((src) => {
+                    const img = document.createElement("img");
+                    img.src = src;
+                    imageTrack.appendChild(img);
+                });
+
+                marqueeText.textContent = textMap[key] || textMap["DEFAULT"]; // Update marquee text
             } else {
-                /* 
-                alert("Please enter a letter between A and Z.");
-                imgElement.style.display = "none";
-                */
-
-                // IF INVALID INPUT IS ENTERED, DISPLAY ALTERNATE IMAGE
-                imgElement.src = "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmtkdnJhMXY4Njd1cXR3MTM3MW1nMzZ1NXNhNHlhOHA0MWF2dDUzdyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13dRJkj5wgKq9q/giphy.gif"
-                imgElement.style.display = "block";
+                imageTrack.innerHTML = `<img src="https://media0.giphy.com/media/13dRJkj5wgKq9q/giphy.gif">`;
+                marqueeText.textContent = textMap["DEFAULT"]; // Reset marquee text if no match
             }
         }
+
+        window.addEventListener("wheel", function(event) {
+            const images = document.querySelectorAll(".image-track img");
+
+            if (images.length > 1) {
+                if (event.deltaY > 0 && currentIndex < images.length - 1) {
+                    // Scroll down (next image)
+                    currentIndex++;
+                } else if (event.deltaY < 0 && currentIndex > 0) {
+                    // Scroll up (previous image)
+                    currentIndex--;
+                }
+
+                // Adjust the transform of the image track based on currentIndex
+                document.getElementById("imageTrack").style.transform = `translateY(-${currentIndex * (500 + 20)}px)`; // 500px for image height, 20px for gap
+            }
+        });
     </script>
 
-<div class="marquee-container">
-    <span class="marquee-text">TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER </span>
-    <span class="marquee-text">TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER TYPE A LETTER </span>
+<div class="marquee-container marquee-top">
+    <span class="marquee-text">TYPE A LETTER TYPE A LETTER TYPE A LETTER</span>
 </div>
 
+    <div class="marquee-container marquee-bottom">
+        <span class="marquee-text">(T)R(Y) (A) LE(T)TE(R) </span>
+    </div>
 </body>
 </html>
