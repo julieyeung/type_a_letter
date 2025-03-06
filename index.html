@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width= , initial-scale=1.0">
-    <title>1 INPUT 1 OUTPUT TEMPLATE</title>
+    <title>Couture Houses</title>
     <style>
        body {
         background-color: black;
@@ -22,21 +22,33 @@
             bottom: 10px; /* Changed position to bottom */
             overflow: hidden;
             white-space: nowrap;
+             pointer-events: none; /* Prevents it from blocking interaction */
         }
 
-
-        .marquee-top .marquee-text {
-        }   
-
-        .marquee-bottom .marquee-text {
+        .marquee-text {
             display: flex;
             gap: 50px;
             font-size: 24px;
             font-weight: bold;
             color: white;
-            animation: scrollText 6s linear infinite;
-            font-size: 200px;
-        }   
+            animation: scrollText 9s linear infinite;
+            font-size: 100px;
+        }
+
+         /* Styling for the top marquee */
+    .marquee-top {
+        top: 10px;
+    }
+
+    .marquee-text-top {
+        font-size: 70px; /* Independent font size */
+        position: center;
+    }
+
+    #charInput, #submitButton, .box {
+    position: relative;
+    z-index: 10;
+}
 
         @keyframes scrollText {
             0% { transform: translateX(100%); }
@@ -87,18 +99,39 @@
         }
 
         .image-container {
-            width: 100%;
-            max-width: 500px;
-            height: 500px;
-            position: relative;
-            overflow: hidden;
-        }
+    position: absolute;
+    overflow-y: scroll; /* Enables vertical scrolling */
+    width: 500px; /* Adjust to match your image width */
+    max-height: 500px; /* Ensures scrollbar always appears */
+    scrollbar-gutter: stable both-edges; /* Keeps space reserved for scrollbar */
+}
 
+/* Force scrollbar to always be shown */
+.image-container::-webkit-scrollbar {
+    width: 12px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Style for scrollbar thumb */
+.image-container::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 6px;
+}
+
+.image-container::-webkit-scrollbar-thumb:hover {
+    background-color: lightgray;
+}
+
+/* This makes sure the scrollbar is visually present even if there's no scrolling needed */
+.image-container::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1); /* Light background to show scrollbar area */
+}
         .image-track {
-            display: flex;
+            display: absolute;
             flex-direction: column;
-            transition: transform 2s ease-in-out; /* Slowed down the transition time */
+            transition: transform 5s ease-in-out; /* Slowed down the transition time */
             gap: 20px; /* Space between images */
+            position: relative;
         }
 
         .image-track img {
@@ -118,6 +151,11 @@
 
         /* Responsive Design */
         @media screen and (max-width: 768px) {
+            body {
+                height: auto;
+                overflow: auto;
+            }
+
             #charInput {
                 width: 80%;
                 max-width: 250px;
@@ -133,104 +171,177 @@
                 max-width: 200px;
                 font-size: 16px;
                 top: 55%;
+                left: 50%;
+                transform: translateX(-50%);
             }
 
             .box {
                 left: 50%;
-                top: 55%;
+                top: 65%;
                 transform: translateX(-50%);
                 text-align: center;
+            }
+
+            .image-container {
+                width: 90%;
+                max-width: 400px;
+                max-height: 300px;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .marquee-text {
+                font-size: 50px;
+            }
+
+            .marquee-text-top {
+                font-size: 40px;
             }
         }
     </style>
 </head>
 <body>
     <input type="text" id="charInput" maxlength="1" placeholder="Type Here">
-    <button onclick="displayImages()" id="submitButton">Show Image</button>
+    <button onclick="displayImages()" id="submitButton">Show Collection</button>
     <div class="box">
         <label for="night">The year was</label>
         <select id="night" name="night">
             <option value="2021">2021.</option>
             <option value="2016">2016.</option>
-            <option value="1962">1962.</option>
-            <option value="1998">1998.</option>
-            <option value="1994">1994.</option>
         </select>
     </div>
     <div class="image-container">
         <div class="image-track" id="imageTrack"></div>
     </div>
     <script>
+        
         let currentIndex = 0;
-        let currentImages = [];
+let currentImages = [];
 
-        function displayImages() {
-            const charInput = document.getElementById("charInput").value.toUpperCase();
-            const numInput = document.getElementById("night").value;
-            const imageTrack = document.getElementById("imageTrack");
-            const marqueeText = document.querySelector(".marquee-text"); // New variable for marquee text
+function displayImages() {
+    const charInput = document.getElementById("charInput").value.toUpperCase();
+    const numInput = document.getElementById("night").value;
+    const imageTrack = document.getElementById("imageTrack");
+    const marqueeTextBottom = document.querySelector(".marquee-text"); // Existing bottom marquee
+    const marqueeTextTop = document.querySelector(".marquee-text-top"); // New top marquee
 
-            const imageMap = {
-                "A-2021": ["IMG/Alexander+McQueen+FW2021+by+Paolo+Roversi+(5).jpg", "IMG/409507.jpeg", "IMG/409506.jpeg"],
-                "R-2016": ["IMG/372232.jpg", "IMG/372231.jpg", "IMG/372228.jpg"],
-                "Y-1962": ["IMG/8afbca8c159a2b8815d447dc143775c2.jpg", "IMG/5681bc683472f4480e6d56ec7b07d0ac.jpg", "IMG/NUM_HC1962E097PH01.0165.jpg"],
-                "T-1998": ["IMG/808ab3c14c878d7fd93bb52bfd8df2b4.jpg", "IMG/a47379944d8cef885031be09bb45b452_newton_photography_helmut_newton_master.jpg", "IMG/126-fig-203-ii.jpg"],
-                "G-1994": ["IMG/FnWxz1VWIAEgkX7.jpeg", "IMG/376578.jpg", "IMG/JEAN-PAUL-GAULTIER-SPRING-1994-RTW-DETAIL-06.webp"],
-            };
+    const imageMap = {
+        "A-2021": ["IMG/Alexander+McQueen+FW2021+by+Paolo+Roversi+(5).jpg", "IMG/409507.jpeg", "IMG/409506.jpeg"],
+        "A-2016": ["IMG/Alexander McQueen 2016 Fall _ Winter Campaign.jpeg", "IMG/Alexander-McQueen-2016-Fall-Winter-Campaign.jpg", "IMG/Photographer Jamie Hawkesworth.jpeg"],
+        "A-1998": ["IMG/erin-o-connor-photography-steven-meisel-alexander-mcqueen-for-givenchy-ad-campaign-fall-winter-1998-391_o.jpg", "IMG/givenchyfall98b.jpg", "IMG/tumblr_n58w0sYNLY1rllxbgo1_400.jpg"],
 
-            const textMap = { // New object to store different scrolling text messages
-                "A-2021": "ALEXANDER MCQUEEN",
-                "R-2016": "RICK OWENS",
-                "Y-1962": "YVES SAINT LAURENT",
-                "T-1998": "THIERRY MUGLER",
-                "G-1994": "GAULTIER",
-                "DEFAULT": "SOMETHING ELSE....(T)R(Y) (A) LE(T)TE(R)"
-            };
+        "R-2021": ["IMG/Rick-Owens-F21-AKS-014.webp", "IMG/Rick_Owens_s21_AKS_88.webp", "IMG/1-copy-1.webp"],
+        "R-2016": ["IMG/372232.jpg", "IMG/372231.jpg", "IMG/372228.jpg"],
 
-            const key = `${charInput}-${numInput}`;
-            imageTrack.innerHTML = "";
+        "Y-2021": ["IMG/Saint-Laurent-Fall-2021-Campaign11.jpg", "IMG/Saint-Laurent-Fall-2021-Campaign08.jpg", "IMG/Saint-Laurent-Fall-2021-Campaign09.jpg"],
+        "Y-2016": ["IMG/saint-laurent-ss16-ad-campaign.jpg", "IMG/Saint-Laurent-Surf-Sound-Collection-2016-Campaign-007.webp", "IMG/Saint-Laurent-Surf-Sound-Collection-2016-Campaign-002.webp"],
+        "Y-1962": ["IMG/8afbca8c159a2b8815d447dc143775c2.jpg", "IMG/5681bc683472f4480e6d56ec7b07d0ac.jpg", "IMG/NUM_HC1962E097PH01.0165.jpg"],
 
-            if (imageMap[key]) {
-                currentImages = imageMap[key];
-                currentIndex = 0;
+        "T-2021": ["IMG/Photo-©Carlijn-Jacobs-courtesy-of-Mugler-23-1.jpg", "IMG/Photo-©Carlijn-Jacobs-courtesy-of-Mugler-24.jpg", "IMG/Photo-©Carlijn-Jacobs-courtesy-of-Mugler-22.jpg"],
+        "T-2016": ["IMG/mugler-ss16-ad-06.webp", "IMG/mugler-ss16-ad-01.webp", "IMG/2048x2730-10baa790-36d9-11e6-9a55-3db27620acd5media-images-doutzen3-7160327-1-eng-gb-doutzen3-jpg.jpg"],
+        "T-1998": ["IMG/808ab3c14c878d7fd93bb52bfd8df2b4.jpg", "IMG/a47379944d8cef885031be09bb45b452_newton_photography_helmut_newton_master.jpg", "IMG/126-fig-203-ii.jpg"],
 
-                currentImages.forEach((src) => {
-                    const img = document.createElement("img");
-                    img.src = src;
-                    imageTrack.appendChild(img);
-                });
+        "G-2021": ["IMG/Givenchy-S21-006.webp", "IMG/givenchy-campaign-ss2021-crash-2.jpg", "IMG/givenchy-spring-summer-2021-campaign-13.jpg"],
+        "G-2016": ["IMG/givenchy-fall-16-ad-2.webp", "IMG/Givenchy-Fall-Winter-2016-Campaign01.jpg", "IMG/Givenchy-Fall-Winter-2016-Campaign03.jpg"],
 
-                marqueeText.textContent = textMap[key] || textMap["DEFAULT"]; // Update marquee text
-            } else {
-                imageTrack.innerHTML = `<img src="https://media0.giphy.com/media/13dRJkj5wgKq9q/giphy.gif">`;
-                marqueeText.textContent = textMap["DEFAULT"]; // Reset marquee text if no match
-            }
-        }
+        "M-2021": ["IMG/00001-Maison-Margiela-RTW-Spring-21.webp", "IMG/00005-Maison-Margiela-RTW-Spring-21.webp", "IMG/00034-Maison-Margiela-RTW-Spring-21.webp"],
+        "M-2016": ["IMG/MYKITA-X-MAISON-MARGIELA-2016-AD-CAMPAIGN-1.jpg", "IMG/MYKITA-X-MAISON-MARGIELA-2016-AD-CAMPAIGN-4.jpg", "IMG/MYKITA-X-MAISON-MARGIELA-2016-AD-CAMPAIGN.jpg"],
 
-        window.addEventListener("wheel", function(event) {
-            const images = document.querySelectorAll(".image-track img");
+        "I-2021": ["IMG/Courtesy-of-©-Iris-van-Herpen-Photography-©-Myrthe-Giesbers-14.jpg", "IMG/Courtesy-of-©-Iris-van-Herpen-Photography-©-Myrthe-Giesbers-4.jpg", "IMG/Courtesy-of-©-Iris-van-Herpen-Photography-©-Myrthe-Giesbers-8.jpg"],
+        "I-2016": ["IMG/585377d26666b2eb4762d51b_IMG_1755.avif", "IMG/585377ce9c190ec57ac08406_IMG_1582-4.34.53.avif", "IMG/585377c06666b2eb4762d513_IMG_1857.avif"],
+    };
 
-            if (images.length > 1) {
-                if (event.deltaY > 0 && currentIndex < images.length - 1) {
-                    // Scroll down (next image)
-                    currentIndex++;
-                } else if (event.deltaY < 0 && currentIndex > 0) {
-                    // Scroll up (previous image)
-                    currentIndex--;
-                }
+    const textMapBottom = { // Different text for the bottom marquee
+        "A-2021": "ALEXANDE(R) (M)CQUEEN",
+        "A-2016": "ALEXANDE(R) (M)CQUEEN",
+        "R-2021": "R(I)CK OWENS",
+        "R-2016": "R(I)CK OWENS",
+        "Y-2021": "YVES SA(I)NT LAU(R)EN(T)",
+        "Y-2016": "YVES SA(I)NT LAU(R)EN(T)",
+        "T-2021": "THIE(R)R(Y) (M)U(G)LER",
+        "T-2016": "THIE(R)R(Y) (M)U(G)LER",
+        "G-2021": "G(I)VENCH(Y)",
+        "G-2016": "G(I)VENCH(Y)",
+        "M-2021": "MA(I)SON M(A)(R)(G)(I)ELA",
+        "M-2016": "MA(I)SON M(A)(R)(G)(I)ELA",
+        "I-2021": "I(R)IS VAN HERP(A)N",
+        "I-2016": "I(R)IS VAN HERP(A)N",
+        "DEFAULT": "(T)R(Y) (A) LE(T)TE(R)"
+    };
 
-                // Adjust the transform of the image track based on currentIndex
-                document.getElementById("imageTrack").style.transform = `translateY(-${currentIndex * (500 + 20)}px)`; // 500px for image height, 20px for gap
-            }
+    const textMapTop = { // New object to store different top scrolling text messages
+        "A-2021": "2021 FALL COLLECTION",
+        "A-2016": "2016 F/W COLLECTION",
+        "R-2021": "2021 F/W COLLECTION",
+        "R-2016": "2016 COLLECTION",
+        "Y-2021": "2021 FALL COLLECTION",
+        "Y-2016": "2016 S/S COLLECTION",
+        "T-2021": "2021 COLLECTION",
+        "T-2016": "2016 COLLECTION",
+        "G-2021": "2021 COLLECTION",
+        "G-2016": "2016 COLLECTION",
+        "M-2021": "2021 SPRING COLLECTION",
+        "M-2016": "2016 COLLECTION",
+        "M-2021": "2021 COLLECTION",
+        "M-2016": "2016 COLLECTION",
+        "I-2021": "2021 COLLECTION",
+        "I-2016": "2016 COLLECTION",
+        "DEFAULT": "Couture Houses"
+    };
+
+    const key = `${charInput}-${numInput}`;
+    imageTrack.innerHTML = "";
+
+    // Check if images exist for the key
+    if (imageMap[key]) {
+        currentImages = imageMap[key];
+        currentIndex = 0;
+
+        // Append images to the container
+        currentImages.forEach((src) => {
+            const img = document.createElement("img");
+            img.src = src;
+            imageTrack.appendChild(img);
         });
+
+        // Update the marquee texts
+        marqueeTextBottom.textContent = textMapBottom[key];
+        marqueeTextTop.textContent = textMapTop[key];
+
+        // Reset alert flag in case of a valid input
+        window.alertShown = false;
+    } else {
+        // Set a loading GIF or placeholder when no images are found
+        imageTrack.innerHTML = `<img src="https://media0.giphy.com/media/13dRJkj5wgKq9q/giphy.gif">`;
+
+        // Reset marquee texts
+        marqueeTextBottom.textContent = textMapBottom["DEFAULT"];
+        marqueeTextTop.textContent = textMapTop["DEFAULT"];
+
+        // Show an alert only if it has not been shown already
+        if (!window.alertShown) {
+            alert("Incorrect combination entered. Please try again. Hint! Notice the parentheses?");
+            window.alertShown = true; // Mark as shown
+        }
+    }
+}
+
+// Ensure button is linked to function
+document.getElementById("submitButton").addEventListener("click", function(event) {
+    event.preventDefault(); // Prevent form submission
+    displayImages();
+});
+
+
+
+     
     </script>
-
-<div class="marquee-container marquee-top">
-    <span class="marquee-text">TYPE A LETTER TYPE A LETTER TYPE A LETTER</span>
-</div>
-
     <div class="marquee-container marquee-bottom">
         <span class="marquee-text">(T)R(Y) (A) LE(T)TE(R) </span>
+    </div>
+    <div class="marquee-container marquee-top">
+        <span class="marquee-text marquee-text-top">Couture Houses</span>
     </div>
 </body>
 </html>
